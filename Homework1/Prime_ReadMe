@@ -1,0 +1,7 @@
+A very simple program to test the following properties
+    a. The number is prime.
+    b. Remove the right most digit and the number is still prime.
+    c. Repeat step b until the last digit is also prime.
+Print all such numbers.
+
+User can change the MIN_NUMBER and MAX_NUMBER to test and print all possible range if numbers that satisfy the given properties.
