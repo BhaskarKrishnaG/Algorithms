@@ -1,0 +1,8 @@
+This is an improvement to Prime.java
+    a. We could be checking just odd numbers by running our loop from 1 and incrementing
+        by 2 every time. But the initial value of loop is decided by the user so we
+        can't blindly increment by 2.
+    b. As we are chopping off the right most digit until we arrive at a single digit,
+        it makes sense to check the left most digit first. If it isn't a prime
+        number, there is no need to check for properties
+This will also have global variables that can be manipulated to
