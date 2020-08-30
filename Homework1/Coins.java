@@ -1,10 +1,16 @@
 package Homework1;
 /**
- * Numbers.java
+ * Coins.java
  *
- * Version:
+ * Version: 1.0
  *
- * Revisions:
+ * Revisions: 1.0
+ *            - Previous version was not considering the last elements to be in
+ *              a group and add the elements from the beginning to that set.
+ *            - The main changes are in tryAllCombination where I am advancing
+ *              the index to one more position to the right and the inner loop
+ *              which is adding the one coin to the set is smart enough to start
+ *              from the next coin or the beginning coin.
  *
  */
 
@@ -16,23 +22,22 @@ package Homework1;
  *   used from the pocket and their values.
  *
  * @author Bhaskar Krishna Gangadhar
- * @author Utkarsh Sharma
  */
 public class Coins {
-    static int[] coins = {1, 1, 2, 25, 25, 5};
-    static int[] toPay = {0, 1, 4, 5, 7, 8, 10};
+    static int[] coins = {1, 1, 1, 1, 5};
+    static int[] toPay = {8};
 
     /**
      * Sort the coins (Insertion sort)
      *
      * @param  coins array of unsorted coins.
      */
-    static void sortCoins(int[] coins ) {
+    static void sortCoins( int[] coins ) {
         int length = coins.length;
-        for ( int i = 1 ; i < length; i++) {
-            int j = i - 1;
-            int key = coins[ i ];
-            while ( j >= 0 & coins[ j ] > key) {
+        for ( int index = 1 ; index < length; index++ ) {
+            int j = index - 1;
+            int key = coins[ index ];
+            while ( j >= 0 && coins[ j ] < key ) {
                 coins[ j + 1] = coins[ j ];
                 --j;
             }
@@ -48,32 +53,35 @@ public class Coins {
      * @param numOfCoins number of coins used to pay.
      */
     static void printCoins( int i, int j, int numOfCoins, int amount ) {
-        System.out.print( amount + " cents: \t\tyes; used coins = ");
-        while ( ( numOfCoins - 1 ) >0 ){
-            System.out.print( coins[ i ] +" cents ");
+        System.out.print( amount + " cents: \t\tyes; used coins = " );
+        while ( ( numOfCoins - 1 ) > 0 ) {
+            System.out.print( coins[ i ] +" cents " );
             i++;
             numOfCoins--;
         }
-        System.out.print( coins[ j ] + " cents\n");
+        System.out.print( coins[ j ] + " cents\n" );
     }
+
     /**
      * This method will compute all possible combinations of coins
      * for the given number of coins.
      *
-     * @param numOfCoins size of our set.
-     * @param amount     amount to be paid.
+     * @param noOfCombinations size of our set.
+     * @param amount           amount to be paid.
      */
-    static boolean tryAllCombinations( int numOfCoins, int amount) {
-        for ( int i = 0; i <= coins.length - numOfCoins; i++ ) {
-            int n = numOfCoins - 2;
+    static boolean tryAllCombinations( int noOfCombinations, int amount ) {
+        for ( int index = 0; index <= coins.length - noOfCombinations + 1; index++ ) {
+            int set = noOfCombinations - 2;
             int sum = 0;
-            while ( n >= 0 ) {
-                sum += coins[ i + n ];
-                --n;
+            while ( set >= 0 ) {
+                sum += coins[ index + set ];
+                --set;
             }
-            for ( int j = i + numOfCoins -1; j < coins.length; j++) {
-                if ( sum + coins[ j ] == amount ) {
-                    printCoins( i, j, numOfCoins, amount);
+            int j = ( index + noOfCombinations -1 ) % coins.length;
+            int upperBound = j == 0 ? index : coins.length - 1;
+            for ( int k = j ; k < upperBound; k++ ) {
+                if ( sum + coins[ k ] == amount ) {
+                    printCoins( index, k, noOfCombinations, amount );
                     return true;
                 }
             }
@@ -91,17 +99,23 @@ public class Coins {
 
         // We will try to pay using the most number of coins
         // and work our way to the least.
-        for ( int i = coins.length; i > 0; i--) {
-            if(tryAllCombinations( i, amount )) {
+        for ( int combination = coins.length; combination > 0; combination-- ) {
+            if  ( tryAllCombinations( combination, amount ) ) {
                 return;
             }
         }
+
+        // If none of the combinations work then print that we can't pay.
         System.out.print( amount + " cents: \t\tno; can not be paid " +
-                "with the following sequence of coins: [");
-        for (int c: coins) {
-            System.out.print( c + ", ");
+                "with the following sequence of coins: [" );
+        for ( int index = 0; index < coins.length; index++ ) {
+            if ( index != coins.length - 1 ) {
+                System.out.print( coins[index] + ", " );
+            }
+            else {
+                System.out.print( coins[index] + "]\n" );
+            }
         }
-        System.out.print("]\n");
     }
 
     /**
@@ -110,12 +124,12 @@ public class Coins {
      * @param  args command line argument.
      */
     public static void main( String[] args ) {
-        sortCoins(coins);
-        for ( int i = 0; i < toPay.length; i++ ) {
-            if (toPay[i] == 0) {
+        sortCoins( coins );
+        for ( int index = 0; index < toPay.length; index++ ) {
+            if ( toPay[ index ] == 0 ) {
                 System.out.println("0 Cents: \t\tcan not be paid;");
             } else {
-                checkIfWeCanPay(toPay[i]);
+                checkIfWeCanPay( toPay[ index ] );
             }
         }
     }
