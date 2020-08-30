@@ -12,7 +12,14 @@ package Homework1;
  *              which is adding the one coin to the set is smart enough to start
  *              from the next coin or the beginning coin.
  *
+ *            2.0
+ *            - Now we are also considering the possibility that the cashier
+ *              also has coins with him and he can give back change to us.
+ *            - With this possibility our goal now is have the least number of
+ *              coins with us at the end of the exchange of coins.
  */
+
+import java.util.Arrays;
 
 /**
  * This program will check if we can pay the cashier the desired amount
@@ -24,27 +31,43 @@ package Homework1;
  * @author Bhaskar Krishna Gangadhar
  */
 public class Coins {
-    static int[] coins = {1, 1, 1, 1, 5};
-    static int[] toPay = {8};
+    static int[] coins = {1, 1, 2, 5, 25, 25, 25};
+    static int[] cashiersCoins = { 2 };
+    static int[] toPay = {0, 1, 4, 5, 7, 8};
+    static int[] allCoins;
 
     /**
      * Sort the coins (Insertion sort)
      *
-     * @param  coins array of unsorted coins.
+     * @param  allCoins array of unsorted coins.
      */
-    static void sortCoins( int[] coins ) {
-        int length = coins.length;
+    static void sortCoins( int[] allCoins ) {
+        int length = allCoins.length;
         for ( int index = 1 ; index < length; index++ ) {
             int j = index - 1;
-            int key = coins[ index ];
-            while ( j >= 0 && coins[ j ] < key ) {
-                coins[ j + 1] = coins[ j ];
+            int key = allCoins[ index ];
+            while ( j >= 0 && allCoins[ j ] < key ) {
+                allCoins[ j + 1] = allCoins[ j ];
                 --j;
             }
-            coins[ j + 1 ] = key;
+            allCoins[ j + 1 ] = key;
         }
     }
 
+    /**
+     * This method will add the coins the cashier has to our pocket but as
+     * negative coins.
+     */
+    static void addCashierCoinsToPocket() {
+        allCoins = new int[ coins.length + cashiersCoins.length ];
+        for ( int index = 0; index < coins.length; index++ ) {
+            allCoins[ index ] = coins[ index ];
+        }
+        for ( int index = 0; index < cashiersCoins.length; index++ ) {
+            allCoins[ coins.length + index ] = -cashiersCoins[ index ];
+        }
+
+    }
     /**
      * Print the coins in desired format.
      *
@@ -53,13 +76,26 @@ public class Coins {
      * @param numOfCoins number of coins used to pay.
      */
     static void printCoins( int i, int j, int numOfCoins, int amount ) {
-        System.out.print( amount + " cents: \t\tyes; used coins = " );
+        System.out.printf( "%d cents: \tyes; I gave the cashier the following " +
+                "coins ", amount );
+        String message = "\t\t\t\t and the cashier gave me ";
         while ( ( numOfCoins - 1 ) > 0 ) {
-            System.out.print( coins[ i ] +" cents " );
+            if ( allCoins[ i ] < 0 ) {
+                message = message.concat( -allCoins[ i ] + " cents " );
+            }
+            else {
+                System.out.printf("%d cents ", allCoins[i]);
+            }
             i++;
             numOfCoins--;
         }
-        System.out.print( coins[ j ] + " cents\n" );
+        if ( allCoins[ j ] < 0 ) {
+            message = message.concat( -allCoins[ j ] + " cents" );
+        }
+        System.out.printf( "%d cents\n",allCoins[j] );
+        if ( message.length() > 29) {
+            System.out.println(message);
+        }
     }
 
     /**
@@ -70,17 +106,17 @@ public class Coins {
      * @param amount           amount to be paid.
      */
     static boolean tryAllCombinations( int noOfCombinations, int amount ) {
-        for ( int index = 0; index <= coins.length - noOfCombinations + 1; index++ ) {
+        for ( int index = 0; index <= allCoins.length - noOfCombinations + 1; index++ ) {
             int set = noOfCombinations - 2;
             int sum = 0;
             while ( set >= 0 ) {
-                sum += coins[ index + set ];
+                sum += allCoins[ index + set ];
                 --set;
             }
-            int j = ( index + noOfCombinations -1 ) % coins.length;
-            int upperBound = j == 0 ? index : coins.length - 1;
+            int j = ( index + noOfCombinations -1 ) % allCoins.length;
+            int upperBound = j == 0 ? index : allCoins.length - 1;
             for ( int k = j ; k < upperBound; k++ ) {
-                if ( sum + coins[ k ] == amount ) {
+                if ( sum + allCoins[ k ] == amount ) {
                     printCoins( index, k, noOfCombinations, amount );
                     return true;
                 }
@@ -109,11 +145,11 @@ public class Coins {
         System.out.print( amount + " cents: \t\tno; can not be paid " +
                 "with the following sequence of coins: [" );
         for ( int index = 0; index < coins.length; index++ ) {
-            if ( index != coins.length - 1 ) {
-                System.out.print( coins[index] + ", " );
+            if ( index != allCoins.length - 1 ) {
+                System.out.print( allCoins[index] + ", " );
             }
             else {
-                System.out.print( coins[index] + "]\n" );
+                System.out.print( allCoins[index] + "]\n" );
             }
         }
     }
@@ -124,7 +160,8 @@ public class Coins {
      * @param  args command line argument.
      */
     public static void main( String[] args ) {
-        sortCoins( coins );
+        addCashierCoinsToPocket();
+        sortCoins( allCoins );
         for ( int index = 0; index < toPay.length; index++ ) {
             if ( toPay[ index ] == 0 ) {
                 System.out.println("0 Cents: \t\tcan not be paid;");
