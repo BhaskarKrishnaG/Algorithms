@@ -1,0 +1,4 @@
+Hw 6.1 omits "Saturn". Why? Please submit your answer in a ".txt" file.
+    We are storing the Object references in the Vector, so after adding aPlanet Object to
+    the vector we are modifying the state of the object. Since the vector holds the reference
+    of aPlanet and not the values the modifications will be reflected.

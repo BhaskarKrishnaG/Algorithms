@@ -1,0 +1,31 @@
+boolean addAll(Collection<? extends E> c)
+    It's a package level method, which returns a boolean and the argument of the method is any Collection object
+     of type E or its sub types(Upper bound)
+
+boolean containsAll(Collection<?> c)
+    It's a package level method that returns a boolean and takes in a Collection object of any type as an argument.
+    Note: With this we are restricted to implementing functionality provided in the Object class
+
+static <T> void fill(List<? super T> list, T obj)
+    A static method that can receives two arguments
+    1. A list of some type T and it's super types(Lower bound)
+    2. An object of type T
+
+static <T extends Comparable<? super T>> void sort(List<T> list)
+    The static method returns nothing.
+    The argument to the method will be of list of type T.
+    T is a child type of a generic Comparable of type that is T or it's super types
+
+static <T> void sort(List<T> list, Comparator<? super T> c)
+    A static method that returns nothing but taken two arguments.
+    1. A list of type T
+    2. A Comparator of Type T or any of it's super types(Lower bound)
+
+static void swap(List<?> list, int i, int j)
+    A static method that returns nothing and taken a List of any type, and two integers as an arguments.
+
+static <K, V> Map<K,V> synchronizedMap(Map<K,V> m)
+    A static method that returns a Map with key and value pairs, and take in as argument a Map with same key and value
+
+static void reverse(List<?> list)
+    A static method that returns nothing and taken a List of any type as an argument.
