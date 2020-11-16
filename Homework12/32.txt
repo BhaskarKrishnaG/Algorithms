@@ -1,0 +1,24 @@
+No
+
+There is a possibility for deadlock to occur.
+
+If all the philosophers pick up their right fork at the same time(Before anyone picks up their left fork) then deadlock will occur. Because at this point all the forks have been picked up and every philosopher is holding a fork and waiting for another fork.
+
+ie:
+
+Main thread initialises all the philosophers(look at the image) and starts up the threads in a for loop.
+Below is one of the path if taken by the scheduler will lead to deadlock
+Note: P0, P1, P2 and P3 notations will be used to represent philosopher threads and F0, F1, F2 and F3 for forks
+a. Main threads starts P0 who enter the run and enters the sync on F0
+b. Scheduler picks main thread who creates P1, P1 executes run and enters sync on F1
+c. Scheduler picks main thread who creates P2, P2 executes run and enters sync on F2
+d. Scheduler picks main thread who creates P3, P3 executes run and enters sync on F3
+At this point no matter which Philosopher is picked by scheduler the program can't proceed. It will result in deadlock.
+
+It might seem like the
+            try {
+                Thread.sleep((long)(random.nextFloat()*1000));
+            }
+            catch(Exception e) {
+            }
+is preventing the above path but we don't know what the random method would return. Even with this there are possibilities for deadlock to occur.
