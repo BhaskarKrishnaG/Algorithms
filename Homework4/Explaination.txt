@@ -1,0 +1,64 @@
+1. starts with 'a' followed by one digit or more digits
+expression: a[0-9]+
+Positive example: a0, a11, a3231
+                  The first character 'a' from the regular expression will always match the list character from the word
+                  [0-9]+ will match any number of digits between 0 and 9, + takes care of at least one occurrence.
+Negative example: b, bb, bk, a, aa1
+                  Any word that does not start will a will be rejected.
+                  If a word starts with a Pattern class will then check the next character, if it's not a digit
+                  then the word is rejected.
+
+
+
+2. a word with the vowels 'aeiou' in order and each vowel can appear only once
+expression: [^aeiou&&^AEIOU]*[aA][^aeiou]*[eE][^aeiou]*[iI][^aeiou]*[oO][^aeiou]*[uU][^aeiou]*
+Positive example: aeiou, AEIOU, abecidokuk
+                  We have multiple [^aeiou&&AEIOU]* to check for characters in between the vowels, this will match any non
+                  vowel character any number of times and then we have groups of individual vowels being checked
+Negative example: a, aeio, bk
+                  If all the vowels are not present the right order the word will be rejected.
+
+
+
+3. starts with ’a’ followed by 3 digits in the range between 1 and 3 only,
+expression: a[1-3]{3}
+Positive example: a111, a123, a333
+                  a will check if the string is starting with an a, [1-3] is restricting the following characters to be
+                  in the range of 1 to 3 and {3} is check if there are exactly three of them.
+Negative example: a1, a444, a012, 123
+                  If the string does not start with a, its rejected.
+                  If a is not followed by 3 digits in the range of 1-3 it's rejected.
+
+
+
+4. starts with ’a’ followed by least 3 digits in the range between 1 and 3 only
+expression: a[1-3]{3,}
+Positive example: a111, a1233
+                  This is very similar to the previous regular expression except for one minor change now we are
+                  accepting more than 3 digits {3,} in the range 1-3
+Negative example: a1, a1234
+                  If the string does not start with a, its rejected.
+                  If a is not followed by 3 or more digits in the range of 1-3 it's rejected.
+
+
+
+5. starts with ’a’ followed by between 1 and 2 digits in the range between 8 and 9 only
+expression: a[8-9]{1,2}
+Positive example: a8, a9, a89, a99
+                  We beginning with testing for 'a' and then we check if there is 1 or 2 occurrences of 8-9 digit
+Negative example: a, aa, 8, a880, a78, a999
+                  If the string does not start with 'a' it's rejected
+                  If 'a' is not followed by digit of 8-9, at least once or at most twice it's rejected.
+
+
+
+6. includes only lower case characters, but not the character 'h', 'p', and 'b'
+expression: [a-z&&[^hpb]]+
+Positive example: a, bk, krishna
+                  a-z takes care of lower case characters, we intersect(&&) that with [^hpb] not any character from the
+                  group h, p, b
+Negative example: h, bhaskar, parrot, 0, A
+                  If the string does not contain only lower case alphabets and if it contains h,p,b it's rejeccted.
+
+
+
