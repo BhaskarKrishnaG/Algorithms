@@ -16,7 +16,6 @@ import java.util.zip.GZIPInputStream;
  * the mode of each value and print the result
  *
  * @author Bhaskar Krishna Gangadhar
- * @author Utkarsh Sharma
  */
 public class NumberCounter {
 
