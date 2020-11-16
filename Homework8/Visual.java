@@ -15,7 +15,6 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Professor HP
  * @author Bhaskar Krishna Gangadhar
- * @author Utkarsh Sharma
  */
 public class Visual extends JFrame {
 
